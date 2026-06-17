@@ -39,15 +39,15 @@ public class PublicController {
             @RequestParam(required = false) String subject) {
 
         Pageable pageable = PageRequest.of(page, size, Sort.by("fullName").ascending());
-        Page<TutorProfile> tutors;
+        
+        // Normalize empty parameters to null
+        String cleanSearch = (search != null && !search.trim().isEmpty()) ? search.trim() : null;
+        String cleanLocation = (location != null && !location.trim().isEmpty()) ? location.trim() : null;
+        String cleanSubject = (subject != null && !subject.trim().isEmpty()) ? subject.trim() : null;
 
-        if (search != null && !search.trim().isEmpty()) {
-            tutors = tutorProfileRepository.searchApprovedTutors(search.trim(), pageable);
-        } else {
-            tutors = tutorProfileRepository.findByApprovalStatus("APPROVED", pageable);
-        }
+        Page<TutorProfile> tutors = tutorProfileRepository.searchApprovedTutorsWithFilters(
+                cleanSearch, cleanLocation, cleanSubject, pageable);
 
-        // Optional: filter by location or subject if needed (can be added later)
         return ResponseEntity.ok(tutors);
     }
 

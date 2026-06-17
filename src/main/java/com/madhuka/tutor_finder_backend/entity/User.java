@@ -1,13 +1,13 @@
-package com.madhuka.tutor_finder_backend.entity; // Adjust package name to yours
+package com.madhuka.tutor_finder_backend.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
 
-@Entity // Tells Spring: "This class represents a Table in MySQL"
-@Table(name = "users") // The table name will be 'users'
-@Data // Lombok magic: Auto-creates Getters, Setters, toString
+@Entity
+@Table(name = "users")
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class User {
@@ -20,9 +20,16 @@ public class User {
     private String email;
 
     @Column(nullable = false)
-    private String password; // Will be encrypted later
+    private String password;
 
     private String role; // "ADMIN", "TUTOR", "PARENT"
+
+    // Personal info fields (mainly used for tutors, but available for all)
+    private String title;      // Mr, Mrs, Miss, Dr, Prof
+    private String firstName;
+    private String lastName;
+    private String gender;     // Male, Female, Other
+    private String dateOfBirth;
 
     private boolean enabled = true;
 }
