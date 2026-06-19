@@ -42,6 +42,17 @@ public class SubjectSearchTrie {
      */
     @PostConstruct
     public void initializeTrie() {
+        if (subjectRepository.count() == 0) {
+            List<String> defaultSubjects = List.of(
+                "Mathematics", "Science", "English", "History", "Physics", 
+                "Chemistry", "Biology", "Computer Science", "Geography", "Art"
+            );
+            for (String name : defaultSubjects) {
+                Subject sub = new Subject();
+                sub.setName(name);
+                subjectRepository.save(sub);
+            }
+        }
         List<Subject> subjects = subjectRepository.findAll();
         for (Subject subject : subjects) {
             insert(subject.getName());

@@ -28,6 +28,7 @@ public class TutorProfile {
     @Column(length = 1000)
     private String bio;
     private String profileImageUrl;
+    private String bannerImageUrl;
 
     // "PENDING", "APPROVED", "REJECTED"
     private String approvalStatus = "PENDING";

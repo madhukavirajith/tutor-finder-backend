@@ -68,6 +68,8 @@ public class TutorController {
         private String location;
         private String bio;
         private List<Long> subjectIds;
+        private String profileImageUrl;
+        private String bannerImageUrl;
 
         public String getFullName() { return fullName; }
         public void setFullName(String fullName) { this.fullName = fullName; }
@@ -83,6 +85,12 @@ public class TutorController {
 
         public List<Long> getSubjectIds() { return subjectIds; }
         public void setSubjectIds(List<Long> subjectIds) { this.subjectIds = subjectIds; }
+
+        public String getProfileImageUrl() { return profileImageUrl; }
+        public void setProfileImageUrl(String profileImageUrl) { this.profileImageUrl = profileImageUrl; }
+
+        public String getBannerImageUrl() { return bannerImageUrl; }
+        public void setBannerImageUrl(String bannerImageUrl) { this.bannerImageUrl = bannerImageUrl; }
     }
 
     /**
@@ -104,6 +112,8 @@ public class TutorController {
         profile.setPhoneNumber(request.getPhoneNumber());
         profile.setLocation(request.getLocation());
         profile.setBio(request.getBio());
+        profile.setProfileImageUrl(request.getProfileImageUrl());
+        profile.setBannerImageUrl(request.getBannerImageUrl());
 
         // Resolve subject entities
         if (request.getSubjectIds() != null) {
@@ -118,6 +128,32 @@ public class TutorController {
 
         TutorProfile updatedProfile = tutorProfileRepository.save(profile);
         return ResponseEntity.ok(updatedProfile);
+    }
+
+    /**
+     * Endpoint 4: Create a new subject (Only authenticated tutors)
+     * POST /api/tutors/subjects
+     */
+    @PostMapping("/subjects")
+    public ResponseEntity<?> createSubject(@RequestBody Map<String, String> request) {
+        String name = request.get("name");
+        if (name == null || name.trim().isEmpty()) {
+            return ResponseEntity.badRequest().body(Map.of("message", "Subject name cannot be empty"));
+        }
+
+        String trimmedName = name.trim();
+        Optional<Subject> existing = subjectRepository.findAll().stream()
+                .filter(s -> s.getName().equalsIgnoreCase(trimmedName))
+                .findFirst();
+
+        if (existing.isPresent()) {
+            return ResponseEntity.ok(existing.get());
+        }
+
+        Subject subject = new Subject();
+        subject.setName(trimmedName);
+        Subject saved = subjectRepository.save(subject);
+        return ResponseEntity.ok(saved);
     }
 
     private User getCurrentAuthenticatedUser() {
