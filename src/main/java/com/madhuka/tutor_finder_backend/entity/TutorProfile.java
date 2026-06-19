@@ -27,7 +27,12 @@ public class TutorProfile {
     private String location;
     @Column(length = 1000)
     private String bio;
+    @Lob
+    @Column(columnDefinition = "LONGTEXT")
     private String profileImageUrl;
+
+    @Lob
+    @Column(columnDefinition = "LONGTEXT")
     private String bannerImageUrl;
 
     // "PENDING", "APPROVED", "REJECTED"
