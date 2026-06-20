@@ -14,6 +14,8 @@ public interface TutorProfileRepository extends JpaRepository<TutorProfile, Long
 
     // Find tutors by approval status (for Admin page)
     List<TutorProfile> findByApprovalStatus(String status);
+    
+    long countByApprovalStatus(String status);
 
     Optional<TutorProfile> findByUser(User user);
 
