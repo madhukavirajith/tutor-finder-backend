@@ -7,6 +7,13 @@ spring:
   jpa:
     hibernate:
       ddl-auto: update
+  ai:
+    google:
+      genai:
+        api-key: ${GEMINI_API_KEY}
+        chat:
+          options:
+            model: gemini-2.5-flash
 server:
   port: ${PORT:8080}
 cors:
